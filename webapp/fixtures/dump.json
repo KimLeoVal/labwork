@@ -1,0 +1,46 @@
+[
+{
+    "model": "webapp.product",
+    "pk": 1,
+    "fields": {
+        "name": "white bred",
+        "description": "WHITEBREDWHITEBREDWHITEBRED",
+        "category": "bred",
+        "remain": 100,
+        "price": "15.00"
+    }
+},
+{
+    "model": "webapp.product",
+    "pk": 2,
+    "fields": {
+        "name": "Pen",
+        "description": "PENPENPENPEN",
+        "category": "other",
+        "remain": 300,
+        "price": "50.00"
+    }
+},
+{
+    "model": "webapp.product",
+    "pk": 3,
+    "fields": {
+        "name": "Beer",
+        "description": "BEERBEERBEER",
+        "category": "alco",
+        "remain": 100,
+        "price": "100.00"
+    }
+},
+{
+    "model": "webapp.product",
+    "pk": 4,
+    "fields": {
+        "name": "Milk",
+        "description": "MILKMILKMILKMILK",
+        "category": "milk",
+        "remain": 20,
+        "price": "60.00"
+    }
+}
+]
