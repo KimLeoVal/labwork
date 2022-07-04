@@ -1,0 +1,17 @@
+{%  extends 'base.html' %}
+{% block content %}
+
+    <p>Вы уверенны, что хотите удалить {{ product.name }}</p>
+    <form action="" method="POST">
+    {%  csrf_token %}
+        <input name="Yes" type="submit" value="Да"/>
+    </form>
+
+    <br>
+    <form action="" method="POST">
+    {%  csrf_token %}
+    <input name="No" type="submit" value="Нет"/>
+    </form>
+    
+    
+{%  endblock %}

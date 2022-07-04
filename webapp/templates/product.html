@@ -10,4 +10,7 @@
     <br>
     <i>Price:</i> <b>{{ product.price }}</b>
     <br>
+    <a href="{% url 'update_product' product.pk %}">Update</a>
+    <br>
+    <a href="{% url 'delete_product' product.pk %}">Delete</a>
 {% endblock %}
