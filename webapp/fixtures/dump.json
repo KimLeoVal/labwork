@@ -23,17 +23,6 @@
 },
 {
     "model": "webapp.product",
-    "pk": 3,
-    "fields": {
-        "name": "Beer",
-        "description": "BEERBEERBEER",
-        "category": "alco",
-        "remain": 100,
-        "price": "100.00"
-    }
-},
-{
-    "model": "webapp.product",
     "pk": 4,
     "fields": {
         "name": "Milk",
@@ -41,6 +30,39 @@
         "category": "milk",
         "remain": 20,
         "price": "60.00"
+    }
+},
+{
+    "model": "webapp.product",
+    "pk": 5,
+    "fields": {
+        "name": "Hennessy",
+        "description": "HENNESSYHENNESSYHENNESSYHENNESSYHENNESSY",
+        "category": "alco",
+        "remain": 0,
+        "price": "6000.00"
+    }
+},
+{
+    "model": "webapp.product",
+    "pk": 6,
+    "fields": {
+        "name": "Brush",
+        "description": "BRUSHBRUSHBRUSH",
+        "category": "other",
+        "remain": 10,
+        "price": "350.00"
+    }
+},
+{
+    "model": "webapp.product",
+    "pk": 14,
+    "fields": {
+        "name": "Beer",
+        "description": "BEERBEERBEER",
+        "category": "alco",
+        "remain": 100,
+        "price": "150.00"
     }
 }
 ]
