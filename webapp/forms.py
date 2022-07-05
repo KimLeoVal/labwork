@@ -11,3 +11,8 @@ class ProductForm(forms.ModelForm):
         model = Product
         fields = '__all__'
 
+class SearchForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ['name']
+

@@ -1,13 +1,27 @@
 from django.db.models.functions import Lower
+from django.http import QueryDict
 from django.shortcuts import render, get_object_or_404, redirect
 
-from webapp.forms import ProductForm
+from webapp.forms import ProductForm, SearchForm
 from webapp.models import Product, CHOICE
 
 
 def index_view(request):
-    products = Product.objects.filter(remain__gt=0).order_by(Lower('category'), Lower('name'))
-    return render(request, 'index.html', {'products': products})
+    if not request.GET:
+        form = SearchForm()
+        products = Product.objects.filter(remain__gt=0).order_by(Lower('category'), Lower('name'))
+        return render(request, 'index.html', {'products': products,'form':form})
+    elif request.GET:
+        src = request.GET.get('name').capitalize()
+        print(src)
+        form = SearchForm()
+        products = Product.objects.all()
+        print(products)
+        products = Product.objects.filter(name=src)
+        return render(request, 'index.html', {'products': products, 'form': form})
+
+
+
 
 
 def product_view(request, pk):
