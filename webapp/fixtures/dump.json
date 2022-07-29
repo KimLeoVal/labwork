@@ -3,8 +3,8 @@
     "model": "webapp.product",
     "pk": 1,
     "fields": {
-        "name": "white bred",
-        "description": "WHITEBREDWHITEBREDWHITEBRED",
+        "name": "White bred",
+        "description": "WHITEBRED",
         "category": "bred",
         "remain": 100,
         "price": "15.00"
@@ -63,6 +63,39 @@
         "category": "alco",
         "remain": 100,
         "price": "150.00"
+    }
+},
+{
+    "model": "webapp.product",
+    "pk": 26,
+    "fields": {
+        "name": "TV",
+        "description": "smart TV",
+        "category": "other",
+        "remain": 20,
+        "price": "50000.00"
+    }
+},
+{
+    "model": "webapp.product",
+    "pk": 27,
+    "fields": {
+        "name": "PC",
+        "description": "PCPCPCPC",
+        "category": "other",
+        "remain": 50,
+        "price": "90000.00"
+    }
+},
+{
+    "model": "webapp.product",
+    "pk": 28,
+    "fields": {
+        "name": "test",
+        "description": "sdfgg",
+        "category": "other",
+        "remain": 0,
+        "price": "1000.00"
     }
 }
 ]
