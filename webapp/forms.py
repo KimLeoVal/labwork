@@ -11,8 +11,10 @@ class ProductForm(forms.ModelForm):
         model = Product
         fields = '__all__'
 
-class SearchForm(forms.ModelForm):
-    class Meta:
-        model = Product
-        fields = ['name']
+# class SearchForm(forms.ModelForm):
+#     class Meta:
+#         model = Product
+#         fields = ['name']
 
+class SearchForm(forms.Form):
+    search = forms.CharField(max_length=50, required=False, label='Найти')
