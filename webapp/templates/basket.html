@@ -11,6 +11,9 @@
         <p>Цена: {{ product.product.price }}</p>
         <p>Количество: {{ product.quantity }}</p>
 
+        <p>Сумма:  {{ product.sum_pro }} </p>
+
+
 {#        <a href="{%  url 'ProductView' product.pk %}">{{ product.name }}</a></h5>#}
 {#    <a href="{% url 'UpdateProduct' product.pk %}" class="card-link">Update</a>#}
 {#    <a href="{% url 'DeleteProduct' product.pk %}" class="card-link">Delete</a>#}
@@ -21,10 +24,10 @@
 </div>
 
 {% endfor %}
-
+<h4>Total: {{ total }}</h4>
 {% if is_paginated %}
         {% include "partial/pagination.html" %}
     {% endif %}
-
+    <br>
 
 {% endblock %}

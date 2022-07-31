@@ -163,24 +163,47 @@ def add_in_basket(request,pk):
                 prod.save()
             except:
                 ProInBasket.objects.create(product_id=pk, quantity=quantity)
-
-        # for product in basket:
-        #     if pk == product.product_id:
-        #         product = get_object_or_404(ProInBasket, product_id=pk)
-        #         qty = product.quantity +1
-        #         product.quantity = qty
-        #         product.save()
-        #     else:
-        #         ProInBasket.objects.create(product_id=pk, quantity=quantity)
-
-
-
     return redirect('IndexView')
+
+# def basket(request):
+#     total = 0
+#     products = ProInBasket.objects.all()
+#     for product in products:
+#         sum_pro = product.quantity * product.product.price
+#         product.sum_pro = sum_pro
+#         product.save()
+#         total += product.sum_pro
+#     return render(request, 'basket.html', {'products': products, 'total':total})
 
 class Basket(ListView):
     model = ProInBasket
     template_name = 'basket.html'
     context_object_name = 'products'
+    paginate_by =2
+
+    def sum_prod(self):
+        total = 0
+        products = ProInBasket.objects.all()
+        for product in products:
+            sum_pro = product.quantity * product.product.price
+            product.sum_pro = sum_pro
+            product.save()
+            total += product.sum_pro
+        return products
+
+    def total(self):
+        total = 0
+        products = ProInBasket.objects.all()
+        for product in products:
+            sum_pro = product.quantity * product.product.price
+            total += sum_pro
+        return total
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['products'] = self.sum_prod()
+        context['total'] = self.total()
+        return context
 
 
 
