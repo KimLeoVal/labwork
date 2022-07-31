@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+{% for product in products  %}
+
+
+    <div class="card" style="width: 18rem;">
+  <div class="card-body">
+    <h5 class="card-title">Название: {{ product.product.name }}
+        <p>Цена: {{ product.product.price }}</p>
+        <p>Количество: {{ product.quantity }}</p>
+
+{#        <a href="{%  url 'ProductView' product.pk %}">{{ product.name }}</a></h5>#}
+{#    <a href="{% url 'UpdateProduct' product.pk %}" class="card-link">Update</a>#}
+{#    <a href="{% url 'DeleteProduct' product.pk %}" class="card-link">Delete</a>#}
+{#      <a href="{% url 'add_in_basket' product.pk %}" class="card-link">Add</a>#}
+
+
+  </div>
+</div>
+
+{% endfor %}
+
+{% if is_paginated %}
+        {% include "partial/pagination.html" %}
+    {% endif %}
+
+
+{% endblock %}

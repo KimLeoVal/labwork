@@ -7,7 +7,7 @@ from django.utils.http import urlencode
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from webapp.forms import ProductForm, SearchForm
-from webapp.models import Product, CHOICE
+from webapp.models import Product, CHOICE, ProInBasket
 
 
 class IndexView(ListView):
@@ -144,6 +144,48 @@ def category_view(request,category):
     print(category)
     products = Product.objects.filter(category=category)
     return render(request, 'category.html', {'products': products})
+
+def add_in_basket(request,pk):
+    quantity = 0
+    product = get_object_or_404(Product,pk=pk)
+    if product.remain != 0:
+        product.remain -=1
+        product.save()
+        quantity +=1
+        basket = ProInBasket.objects.all()
+        if not basket:
+            ProInBasket.objects.create(product_id=pk, quantity=quantity)
+        else:
+            try:
+                prod = get_object_or_404(ProInBasket, product_id=pk)
+                qty = prod.quantity + 1
+                prod.quantity = qty
+                prod.save()
+            except:
+                ProInBasket.objects.create(product_id=pk, quantity=quantity)
+
+        # for product in basket:
+        #     if pk == product.product_id:
+        #         product = get_object_or_404(ProInBasket, product_id=pk)
+        #         qty = product.quantity +1
+        #         product.quantity = qty
+        #         product.save()
+        #     else:
+        #         ProInBasket.objects.create(product_id=pk, quantity=quantity)
+
+
+
+    return redirect('IndexView')
+
+class Basket(ListView):
+    model = ProInBasket
+    template_name = 'basket.html'
+    context_object_name = 'products'
+
+
+
+
+
 
 
 
