@@ -6,8 +6,8 @@ from django.urls import reverse, reverse_lazy
 from django.utils.http import urlencode
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from webapp.forms import ProductForm, SearchForm
-from webapp.models import Product, CHOICE, ProInBasket
+from webapp.forms import ProductForm, SearchForm, OrderForm
+from webapp.models import Product, CHOICE, ProInBasket, Order, OrderBasket
 
 
 class IndexView(ListView):
@@ -60,12 +60,12 @@ class IndexView(ListView):
     #     return render(request, 'index.html', {'products': products, 'form': form})
 
 
-
-
 class ProductView(DetailView):
     model = Product
     template_name = 'product.html'
     context_object_name = 'product'
+
+
 # def product_view(request, pk):
 #     product = get_object_or_404(Product, pk=pk)
 #     return render(request, 'product.html', {'product': product})
@@ -77,6 +77,7 @@ class CreateProduct(CreateView):
 
     def get_success_url(self):
         return reverse('ProductView', kwargs={'pk': self.object.pk})
+
 
 # def create_product(request):
 #     if request.method == "GET":
@@ -97,6 +98,8 @@ class UpdateProduct(UpdateView):
 
     def get_success_url(self):
         return reverse('ProductView', kwargs={'pk': self.object.pk})
+
+
 # def update_product(request,pk):
 #     product = get_object_or_404(Product, pk=pk)
 #     if request.method == "GET":
@@ -127,6 +130,8 @@ class DeleteProduct(DeleteView):
     template_name = 'delete.html'
     context_object_name = 'product'
     success_url = reverse_lazy('IndexView')
+
+
 # def delete_product(request,pk):
 #     product = get_object_or_404(Product, pk=pk)
 #     if request.method == 'GET':
@@ -140,18 +145,19 @@ class DeleteProduct(DeleteView):
 #             product.delete()
 #         return redirect('index_view')
 
-def category_view(request,category):
+def category_view(request, category):
     print(category)
     products = Product.objects.filter(category=category)
     return render(request, 'category.html', {'products': products})
 
-def add_in_basket(request,pk):
+
+def add_in_basket(request, pk):
     quantity = 0
-    product = get_object_or_404(Product,pk=pk)
+    product = get_object_or_404(Product, pk=pk)
     if product.remain != 0:
-        product.remain -=1
+        product.remain -= 1
         product.save()
-        quantity +=1
+        quantity += 1
         basket = ProInBasket.objects.all()
         if not basket:
             ProInBasket.objects.create(product_id=pk, quantity=quantity)
@@ -164,6 +170,7 @@ def add_in_basket(request,pk):
             except:
                 ProInBasket.objects.create(product_id=pk, quantity=quantity)
     return redirect('IndexView')
+
 
 # def basket(request):
 #     total = 0
@@ -179,7 +186,7 @@ class Basket(ListView):
     model = ProInBasket
     template_name = 'basket.html'
     context_object_name = 'products'
-    paginate_by =2
+    paginate_by = 2
 
     def sum_prod(self):
         total = 0
@@ -203,6 +210,7 @@ class Basket(ListView):
         context = super().get_context_data(**kwargs)
         context['products'] = self.sum_prod()
         context['total'] = self.total()
+        context['form'] = OrderForm
         return context
 
 
@@ -213,8 +221,39 @@ class DeleteFromBasket(DeleteView):
     success_url = reverse_lazy('Basket')
 
 
+# def checkout(request,form):
+#     print(form)
+#     Order.objects.create()
+class CreateOrder(CreateView):
+    model = Order
+    template_name = 'basket.html'
+    form_class = OrderForm
+
+    def form_valid(self, form):
+        """If the form is valid, save the associated model."""
+        self.object = form.save()
+        products = ProInBasket.objects.all()
+        order_id = self.object.pk
+        for product in products:
+            OrderBasket.objects.create(order_id=order_id, product_id=product.product.pk, quantity=product.quantity)
+        products.delete()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('IndexView')
 
 
-
-
-
+def createorder(request):
+    if request.method == "GET":
+        form = OrderForm()
+        return render(request, 'basket.html', {'form': form})
+    else:
+        form = OrderForm(data=request.POST)
+    if form.is_valid():
+        order = form.save()
+        products = ProInBasket.objects.all()
+        order_id = order.pk
+        for product in products:
+            OrderBasket.objects.create(order_id=order_id, product_id=product.product.pk, quantity=product.quantity)
+        return redirect('Basket')
+    return render(request, 'basket.html', {"form": form})

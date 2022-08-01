@@ -3,7 +3,7 @@ from pyexpat import model
 from django import forms
 from django.forms import widgets
 
-from webapp.models import Product
+from webapp.models import Product, Order
 
 
 class ProductForm(forms.ModelForm):
@@ -18,3 +18,8 @@ class ProductForm(forms.ModelForm):
 
 class SearchForm(forms.Form):
     search = forms.CharField(max_length=50, required=False, label='Найти')
+
+class OrderForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        exclude = ['products']

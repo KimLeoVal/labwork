@@ -26,6 +26,9 @@
         </div>
 
     {% endfor %}
+    <form action="{% url 'CreateOrder' %}" method="POST">
+    {%  include 'partial/form.html' with button='Оформит заказ'%}
+    </form>
     <h4>Total: {{ total }}</h4>
     {% if is_paginated %}
         {% include "partial/pagination.html" %}
