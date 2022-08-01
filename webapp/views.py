@@ -155,8 +155,8 @@ def add_in_basket(request, pk):
     quantity = 0
     product = get_object_or_404(Product, pk=pk)
     if product.remain != 0:
-        product.remain -= 1
-        product.save()
+        # product.remain -= 1
+        # product.save()
         quantity += 1
         basket = ProInBasket.objects.all()
         if not basket:
@@ -165,8 +165,14 @@ def add_in_basket(request, pk):
             try:
                 prod = get_object_or_404(ProInBasket, product_id=pk)
                 qty = prod.quantity + 1
-                prod.quantity = qty
-                prod.save()
+                if qty > product.remain:
+                    qty = prod.quantity
+                    prod.quantity = qty
+                    prod.save()
+                else:
+                    qty = prod.quantity + 1
+                    prod.quantity = qty
+                    prod.save()
             except:
                 ProInBasket.objects.create(product_id=pk, quantity=quantity)
     return redirect('IndexView')
@@ -234,6 +240,11 @@ class CreateOrder(CreateView):
         order_id = self.object.pk
         for product in products:
             OrderBasket.objects.create(order_id=order_id, product_id=product.product.pk, quantity=product.quantity)
+            pro = get_object_or_404(Product,pk = product.product.pk)
+            remain = pro.remain - product.quantity
+            pro.remain = remain
+            pro.save()
+
         products.delete()
         return super().form_valid(form)
 
