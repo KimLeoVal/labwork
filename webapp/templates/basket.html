@@ -2,30 +2,32 @@
 {% block content %}
 
 
-{% for product in products  %}
+    {% for product in products %}
 
 
-    <div class="card" style="width: 18rem;">
-  <div class="card-body">
-    <h5 class="card-title">Название: {{ product.product.name }}
-        <p>Цена: {{ product.product.price }}</p>
-        <p>Количество: {{ product.quantity }}</p>
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Название: {{ product.product.name }}
+                    <p>Цена: {{ product.product.price }}</p>
+                    <p>Количество: {{ product.quantity }}</p>
 
-        <p>Сумма:  {{ product.sum_pro }} </p>
-
-
-{#        <a href="{%  url 'ProductView' product.pk %}">{{ product.name }}</a></h5>#}
-{#    <a href="{% url 'UpdateProduct' product.pk %}" class="card-link">Update</a>#}
-{#    <a href="{% url 'DeleteProduct' product.pk %}" class="card-link">Delete</a>#}
-{#      <a href="{% url 'add_in_basket' product.pk %}" class="card-link">Add</a>#}
+                    <p>Сумма: {{ product.sum_pro }} </p>
 
 
-  </div>
-</div>
+                    <button><a
+                            href="{% url 'DeleteFromBasket' product.pk %}" style="text-decoration:none; color:black">Удалить</a>
+                    </button>
+                    {#    <a href="{% url 'UpdateProduct' product.pk %}" class="card-link">Update</a>#}
+                    {#    <a href="{% url 'DeleteProduct' product.pk %}" class="card-link">Delete</a>#}
+                    {#      <a href="{% url 'add_in_basket' product.pk %}" class="card-link">Add</a>#}
 
-{% endfor %}
-<h4>Total: {{ total }}</h4>
-{% if is_paginated %}
+
+            </div>
+        </div>
+
+    {% endfor %}
+    <h4>Total: {{ total }}</h4>
+    {% if is_paginated %}
         {% include "partial/pagination.html" %}
     {% endif %}
     <br>
