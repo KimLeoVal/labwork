@@ -221,9 +221,7 @@ class DeleteFromBasket(DeleteView):
     success_url = reverse_lazy('Basket')
 
 
-# def checkout(request,form):
-#     print(form)
-#     Order.objects.create()
+
 class CreateOrder(CreateView):
     model = Order
     template_name = 'basket.html'
@@ -243,17 +241,17 @@ class CreateOrder(CreateView):
         return reverse('IndexView')
 
 
-def createorder(request):
-    if request.method == "GET":
-        form = OrderForm()
-        return render(request, 'basket.html', {'form': form})
-    else:
-        form = OrderForm(data=request.POST)
-    if form.is_valid():
-        order = form.save()
-        products = ProInBasket.objects.all()
-        order_id = order.pk
-        for product in products:
-            OrderBasket.objects.create(order_id=order_id, product_id=product.product.pk, quantity=product.quantity)
-        return redirect('Basket')
-    return render(request, 'basket.html', {"form": form})
+# def createorder(request):
+#     if request.method == "GET":
+#         form = OrderForm()
+#         return render(request, 'basket.html', {'form': form})
+#     else:
+#         form = OrderForm(data=request.POST)
+#     if form.is_valid():
+#         order = form.save()
+#         products = ProInBasket.objects.all()
+#         order_id = order.pk
+#         for product in products:
+#             OrderBasket.objects.create(order_id=order_id, product_id=product.product.pk, quantity=product.quantity)
+#         return redirect('Basket')
+#     return render(request, 'basket.html', {"form": form})
