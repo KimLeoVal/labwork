@@ -1,6 +1,6 @@
 from django.db.models import Q
 from django.db.models.functions import Lower
-from django.http import QueryDict
+from django.http import QueryDict, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.utils.http import urlencode
@@ -152,6 +152,8 @@ def category_view(request, category):
 
 
 def add_in_basket(request, pk):
+
+
     quantity = 0
     product = get_object_or_404(Product, pk=pk)
     if product.remain != 0:
@@ -175,7 +177,8 @@ def add_in_basket(request, pk):
                     prod.save()
             except:
                 ProInBasket.objects.create(product_id=pk, quantity=quantity)
-    return redirect('IndexView')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
+    # return redirect('IndexView')
 
 
 # def basket(request):
@@ -226,6 +229,10 @@ class DeleteFromBasket(DeleteView):
     context_object_name = 'product'
     success_url = reverse_lazy('Basket')
 
+# def delete_one_by_one(request,pk)
+#
+#
+#     return redirect('IndexView')
 
 
 class CreateOrder(CreateView):
