@@ -21,3 +21,31 @@ class ProInBasket(models.Model):
 
     def __str__(self):
         return f'Название:{self.product}'
+
+
+class OrderBasket(models.Model):
+    product = models.ForeignKey('webapp.Product', related_name='orderb', on_delete=models.CASCADE,
+                                verbose_name='Продукт')
+    quantity = models.PositiveIntegerField()
+    order = models.ForeignKey('webapp.Order', related_name='orders', on_delete=models.CASCADE,
+                              verbose_name='Заказ')
+
+
+# class OrderProducts(models.Model):
+#     order = models.ForeignKey('webapp.Order', on_delete=models.CASCADE, verbose_name='Заказ', related_name='orders')
+#     product = models.ForeignKey('webapp.Product', related_name='orderb', on_delete=models.CASCADE,
+#                                 verbose_name='Продукт')
+
+class Order(models.Model):
+
+    name = models.CharField(max_length=20, verbose_name='Имя')
+    products = models.ManyToManyField('webapp.Product', related_name='orders', blank=True)
+    phone = models.CharField(max_length=20, verbose_name='Телефон')
+    adres = models.CharField(max_length=60, verbose_name='Адрес')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+
+    def get_products(self):
+        products = OrderBasket.objects.all()
+        return products
+
+

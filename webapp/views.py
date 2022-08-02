@@ -169,11 +169,13 @@ def category_view(request, category):
 
 
 def add_in_basket(request, pk):
-
+    quantity = 0
+    product = get_object_or_404(Product, pk=pk)
     if request.method=='GET':
-        quantity = 0
+
         product = get_object_or_404(Product, pk=pk)
         if product.remain != 0:
+            # print(product.remain)
             # product.remain -= 1
             # product.save()
             quantity += 1
@@ -196,25 +198,33 @@ def add_in_basket(request, pk):
                     ProInBasket.objects.create(product_id=pk, quantity=quantity)
         return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
     else:
-        quantity = 0
-        product = get_object_or_404(Product, pk=pk)
+        # product = get_object_or_404(Product, pk=pk)
+        # print(product)
         if product.remain != 0:
-            quantity_form = request.POST.get('qty')
+            # print(product.remain)
+            quantity = int(request.POST.get('qty'))
+            # print(quantity)
             basket = ProInBasket.objects.all()
+            # print(basket)
             if not basket:
-                if int(quantity_form) > product.remain:
-                    quantity_form = product.remain
-                    ProInBasket.objects.create(product_id=pk, quantity=quantity_form)
+                if quantity > product.remain :
+                    quantity = product.remain
+                ProInBasket.objects.create(product_id=pk, quantity=quantity)
+
             else:
                 try:
-                    prod = get_object_or_404(ProInBasket, product_id=pk)
-                    qty = prod.quantity + quantity_form
+                    if quantity > product.remain:
+                        quantity = product.remain
+                    prod = get_object_or_404(ProInBasket,product_id = product.pk)
+
+                    qty = prod.quantity  + quantity
+
+
                     if qty > product.remain:
-                        qty = prod.quantity
+                        qty = product.remain
                         prod.quantity = qty
                         prod.save()
                     else:
-                        qty = prod.quantity + 1
                         prod.quantity = qty
                         prod.save()
                 except:
@@ -238,7 +248,7 @@ class Basket(ListView):
     model = ProInBasket
     template_name = 'basket.html'
     context_object_name = 'products'
-    paginate_by = 10
+    # paginate_by = 2
 
 
     def sum_prod(self):
@@ -281,10 +291,9 @@ def delete_one_by_one(request,pk):
         product.save()
     elif product.quantity ==1:
         product.delete()
-    if product:
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
-    else:
-        return redirect('IndexView')
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
+
 
 
 
