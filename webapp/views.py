@@ -229,10 +229,19 @@ class DeleteFromBasket(DeleteView):
     context_object_name = 'product'
     success_url = reverse_lazy('Basket')
 
-# def delete_one_by_one(request,pk)
-#
-#
-#     return redirect('IndexView')
+def delete_one_by_one(request,pk):
+    product = get_object_or_404(ProInBasket,pk=pk)
+    if product.quantity >1:
+        qty = product.quantity -1
+        product.quantity = qty
+        product.save()
+    elif product.quantity ==1:
+        product.delete()
+    if product:
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
+    else:
+        return redirect('IndexView')
+
 
 
 class CreateOrder(CreateView):

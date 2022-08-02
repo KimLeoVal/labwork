@@ -16,7 +16,12 @@
 
                     <button><a
                             href="{% url 'DeleteFromBasket' product.pk %}" style="text-decoration:none; color:black">Удалить</a>
+                        <br>
+
+
                     </button>
+                    <button><a href="{% url 'delete_one_by_one' product.pk %}" style="text-decoration:none;
+                        color:black">Удалить по 1</a></button>
                     {#    <a href="{% url 'UpdateProduct' product.pk %}" class="card-link">Update</a>#}
                     {#    <a href="{% url 'DeleteProduct' product.pk %}" class="card-link">Delete</a>#}
                     {#      <a href="{% url 'add_in_basket' product.pk %}" class="card-link">Add</a>#}
@@ -27,7 +32,7 @@
 
     {% endfor %}
     <form action="{% url 'CreateOrder' %}" method="POST">
-    {%  include 'partial/form.html' with button='Оформит заказ'%}
+        {% include 'partial/form.html' with button='Оформит заказ' %}
     </form>
     <h4>Total: {{ total }}</h4>
     {% if is_paginated %}
