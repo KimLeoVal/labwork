@@ -238,7 +238,7 @@ class Basket(ListView):
     model = ProInBasket
     template_name = 'basket.html'
     context_object_name = 'products'
-    paginate_by = 2
+    paginate_by = 10
 
 
     def sum_prod(self):

@@ -25,4 +25,4 @@ class OrderForm(forms.ModelForm):
         exclude = ['products']
 
 class AddQtyToBasketForm(forms.Form):
-    qty = forms.IntegerField(label="Укажите нужное количество")
+    qty = forms.IntegerField(label="Добавить много:")

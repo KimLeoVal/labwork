@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
 
-
+{% if not products %}
+    <h3>Ваша козина пуста. Добавьте товар в корзину!</h3>
+    {%  endif %}
     {% for product in products %}
 
 
@@ -31,10 +33,13 @@
         </div>
 
     {% endfor %}
+    {% if products %}
+        <h3 style="">Заполните форму для заказа</h3>
     <form action="{% url 'CreateOrder' %}" method="POST">
         {% include 'partial/form.html' with button='Оформит заказ' %}
     </form>
     <h4>Total: {{ total }}</h4>
+    {% endif %}
     {% if is_paginated %}
         {% include "partial/pagination.html" %}
     {% endif %}
