@@ -23,3 +23,6 @@ class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
         exclude = ['products']
+
+class AddQtyToBasketForm(forms.Form):
+    qty = forms.IntegerField(label="Укажите нужное количество")

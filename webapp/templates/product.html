@@ -15,6 +15,12 @@
     <a href="{% url 'DeleteProduct' product.pk %}">Delete</a>
     <br>
     <a href="{% url 'add_in_basket' product.pk %}">Add</a>
+        <form action="{% url 'add_in_basket' product.pk %}" method="POST">
+{%  include 'partial/form.html' with button='Добавить'%}
+
+
+
+        </form>
 
 
 {% endblock %}

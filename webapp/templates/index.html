@@ -13,6 +13,13 @@
     <a href="{% url 'UpdateProduct' product.pk %}" class="card-link">Update</a>
     <a href="{% url 'DeleteProduct' product.pk %}" class="card-link">Delete</a>
       <a href="{% url 'add_in_basket' product.pk %}" class="card-link">Add</a>
+             <form action="{% url 'add_in_basket' product.pk %}" method="POST">
+
+{%  include 'partial/form2.html' with button='Добавить'%}
+
+
+
+        </form>
 
 
   </div>
