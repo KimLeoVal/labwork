@@ -231,7 +231,7 @@ def add_in_basket(request, pk):
                     ProInBasket.objects.create(product_id=pk, quantity=quantity)
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
-    # return redirect('IndexView')
+
 
 
 # def basket(request):
@@ -248,7 +248,8 @@ class Basket(ListView):
     model = ProInBasket
     template_name = 'basket.html'
     context_object_name = 'products'
-    # paginate_by = 2
+    paginate_by = 2
+
 
 
     def sum_prod(self):
@@ -269,12 +270,13 @@ class Basket(ListView):
             total += sum_pro
         return total
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['products'] = self.sum_prod()
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        context['sum_prod'] = self.sum_prod()
         context['total'] = self.total()
         context['form'] = OrderForm
         return context
+
 
 
 class DeleteFromBasket(DeleteView):

@@ -4,35 +4,66 @@
 {% if not products %}
     <h3>Ваша козина пуста. Добавьте товар в корзину!</h3>
     {%  endif %}
-    {% for product in products %}
-
-
-        <div class="card" style="width: 18rem;">
+{% for product in products %}
+<div class="card" style="width: 30rem;">
             <div class="card-body">
-                <h5 class="card-title">Название: {{ product.product.name }}
-                    <p>Цена: {{ product.product.price }}</p>
-                    <p>Количество: {{ product.quantity }}</p>
+                <h5 class="card-title">Инфо товара: <b>{{ product.product.name }}</b></h5>
+{#<h3 style="text-align: center">Инфо товара</h3>#}
+    <table class="table">
+  <thead>
+    <tr>
+      <th scope="col"><i>Название:</i> </th>
+      <th scope="col"><i>Цена:</i></th>
+      <th scope="col"><i>Количество:</i></th>
+        <th scope="col"><i>Сумма: </i></th>
 
-                    <p>Сумма: {{ product.sum_pro }} </p>
+    </tr>
+  </thead>
+  <tbody>
 
+    <tr>
+      <td><b>{{ product.product.name }}</b></td>
+      <td> <b>{{ product.product.price }}</b> </td>
+        <td> <b>{{ product.quantity }}</b></td>
+        <td> <b>{{ sum_pro }}</b></td>
 
-                    <button><a
-                            href="{% url 'DeleteFromBasket' product.pk %}" style="text-decoration:none; color:black">Удалить</a>
-                        <br>
+    </tr>
+    <tr>
+  </tbody>
+</table>
+      <button><a href="{% url 'DeleteFromBasket' product.pk %}" style="text-decoration:none; color:black">Удалить</a></button>
 
-
-                    </button>
-                    <button><a href="{% url 'delete_one_by_one' product.pk %}" style="text-decoration:none;
+<button><a href="{% url 'delete_one_by_one' product.pk %}" style="text-decoration:none;
                         color:black">Удалить по 1</a></button>
+      </div>
+      </div>
+{#        <div class="card" style="width: 18rem;">#}
+{#            <div class="card-body">#}
+{#                <h5 class="card-title">Название: {{ product.product.name }}#}
+{#                    <p>Цена: {{ product.product.price }}</p>#}
+{#                    <p>Количество: {{ product.quantity }}</p>#}
+{##}
+{#                    <p>Сумма: {{ product.sum_pro }} </p>#}
+{##}
+{##}
+{#                    <button><a#}
+{#                            href="{% url 'DeleteFromBasket' product.pk %}" style="text-decoration:none; color:black">Удалить</a>#}
+{#                        <br>#}
+{##}
+{##}
+{#                    </button>#}
+{#                    <button><a href="{% url 'delete_one_by_one' product.pk %}" style="text-decoration:none;#}
+{#                        color:black">Удалить по 1</a></button>#}
                     {#    <a href="{% url 'UpdateProduct' product.pk %}" class="card-link">Update</a>#}
                     {#    <a href="{% url 'DeleteProduct' product.pk %}" class="card-link">Delete</a>#}
                     {#      <a href="{% url 'add_in_basket' product.pk %}" class="card-link">Add</a>#}
-
-
-            </div>
-        </div>
-
+{##}
+{##}
+{#            </div>#}
+{#        </div>#}
     {% endfor %}
+    <br>
+    <br>
     {% if products %}
         <h3 style="">Заполните форму для заказа</h3>
     <form action="{% url 'CreateOrder' %}" method="POST">
@@ -43,6 +74,6 @@
     {% if is_paginated %}
         {% include "partial/pagination.html" %}
     {% endif %}
-    <br>
+
 
 {% endblock %}
