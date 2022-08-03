@@ -259,9 +259,7 @@ class Basket(ListView):
             sum_pro = product.quantity * product.product.price
             product.sum_pro = sum_pro
             product.save()
-            print(product.sum_pro)
             total += product.sum_pro
-        print(product.sum_pro)
         return products
 
     def total(self):
