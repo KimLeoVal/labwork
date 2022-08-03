@@ -248,7 +248,7 @@ class Basket(ListView):
     model = ProInBasket
     template_name = 'basket.html'
     context_object_name = 'products'
-    paginate_by = 2
+
 
 
 
@@ -259,7 +259,9 @@ class Basket(ListView):
             sum_pro = product.quantity * product.product.price
             product.sum_pro = sum_pro
             product.save()
+            print(product.sum_pro)
             total += product.sum_pro
+        print(product.sum_pro)
         return products
 
     def total(self):
@@ -272,7 +274,7 @@ class Basket(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
-        context['sum_prod'] = self.sum_prod()
+        context['products'] = self.sum_prod()
         context['total'] = self.total()
         context['form'] = OrderForm
         return context
@@ -284,6 +286,8 @@ class DeleteFromBasket(DeleteView):
     template_name = 'delete.html'
     context_object_name = 'product'
     success_url = reverse_lazy('Basket')
+
+
 
 def delete_one_by_one(request,pk):
     product = get_object_or_404(ProInBasket,pk=pk)
