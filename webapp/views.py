@@ -295,6 +295,7 @@ class Basket(TemplateView):
     print(products)
     pk_list = AddInBasket.id_list
     qty = AddInBasket.qty_list
+    total = 0
     # def prod(self,request,*args,**kwargs):
     #     for pk in self.pk_list:
     #         product = get_object_or_404(Product,pk=pk)
@@ -314,9 +315,10 @@ class Basket(TemplateView):
             product.qty = self.qty[i]
             product.sum=product.price*self.qty[i]
             self.products.append(product)
+            self.total += product.sum
         print(self.products)
 
-        return render(request, 'basket.html', {'products': self.products})
+        return render(request, 'basket.html', {'products': self.products,'total': self.total})
 
 
 
