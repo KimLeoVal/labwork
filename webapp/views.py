@@ -307,7 +307,7 @@ class DeleteFromBasket(DeleteView):
     model = ProInBasket
     template_name = 'delete.html'
     context_object_name = 'product'
-    success_url = reverse_lazy('Basket')
+    success_url = reverse_lazy('webapp:Basket')
 
 
 
