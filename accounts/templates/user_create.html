@@ -1,0 +1,10 @@
+
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <h1>Регистрация</h1>
+    <form action="" method="post">
+    {% include 'partial/form.html' with form_method='post' button="Зарегистрироваться" %}
+    </form>
+{% endblock %}

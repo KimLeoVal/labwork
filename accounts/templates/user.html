@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{#{% block title %}Пользователь{% endblock %}#}
+{#{% block menu_links %}#}
+{#    <li><a href="#">Редактировать</a></li>#}
+{#    <li><a href="#">Смена пароля</a></li>#}
+{#{% endblock %}#}
+{#{% block content %}#}
+{#    <h1>Личная страница пользователя {{ user_obj.get_full_name|default:user_obj.username }}</h1>#}
+{#    {% if user_obj.profile.avatar %}#}
+{#        <img class="avatar" src="{{ user_obj.profile.avatar.url }}" width="250" height="250" alt="user picture">#}
+{#    {% endif %}#}
+{% block content %}
+    <p>Имя пользователя: {{ user.username }}</p>
+    <p>Имя: {{ user.first_name }}</p>
+    <p>Фамилия: {{ user.last_name }}</p>
+    <p>Почта: {{ user.email }}</p>
+    <p>Аватар: {{ user.avatar }}</p>
+    <p>Git: {{ user.git }}</p>
+    <p>О себе: {{ user.about }}</p>
+    <h2 class="text-center clear">Проэкты автора:</h2>
+{%  for project in request.user.projects.all %}
+    <a href="{% url 'webapp:DetailProjectView' project.pk %}">{{ project }}</a>
+
+    {% endfor %}
+    <li><a href="{% url 'accounts:UserChangeView' user.pk %}">Редактировать</a></li>
+    <li><a href="{% url 'accounts:password_change'  %}">Смена пароля</a></li>
+{% endblock %}
+
+password_change

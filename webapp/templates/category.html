@@ -4,11 +4,11 @@
 {% for product in products %}
     <div class="card" style="width: 18rem;">
   <div class="card-body">
-    <h5 class="card-title">Name: <a href="{% url 'category_view' product.category %}">{{ product.name|title }}</a></h5>
+    <h5 class="card-title">Name: <a href="{% url 'webapp:category_view' product.category %}">{{ product.name|title }}</a></h5>
     <h6 class="card-subtitle mb-2 text-muted">Price: {{ product.price }}</h6>
     <p class="card-text">Category: {{ product.get_category_display }}</p>
-    <a href="{% url 'update_product' product.pk %}" class="card-link">Update</a>
-    <a href="{% url 'delete_product' product.pk %}" class="card-link">Delete</a>
+    <a href="{% url 'webapp:update_product' product.pk %}" class="card-link">Update</a>
+    <a href="{% url 'webapp:delete_product' product.pk %}" class="card-link">Delete</a>
   </div>
 </div>
     {%  endfor %}

@@ -33,18 +33,18 @@
 {#    <br>#}
 {#    <i>Price:</i> <b>{{ product.price }}</b>#}
 {#    <br>#}
-    <button ><a href="{% url 'UpdateProduct' product.pk %}" style="text-decoration: none;color: chocolate">Update Product</a> </button>
+    <button ><a href="{% url 'webapp:UpdateProduct' product.pk %}" style="text-decoration: none;color: chocolate">Update Product</a> </button>
     <br><br>
-    <button ><a href="{% url 'DeleteProduct' product.pk %}" style="text-decoration: none;color: red">Delete Product</a> </button>
+    <button ><a href="{% url 'webapp:DeleteProduct' product.pk %}" style="text-decoration: none;color: red">Delete Product</a> </button>
     <br><br>
-    <button ><a href="{% url 'add_in_basket' product.pk %}" style="text-decoration: none; color: darkorchid">Add in Basket</a> </button>
+    <button ><a href="{% url 'webapp:add_in_basket' product.pk %}" style="text-decoration: none; color: darkorchid">Add in Basket</a> </button>
 {#    <a href="{% url 'UpdateProduct' product.pk %}">Update</a>#}
 {#    <br>#}
 {#    <a href="{% url 'DeleteProduct' product.pk %}">Delete</a>#}
 {#    <br>#}
 {#    <a href="{% url 'add_in_basket' product.pk %}">Add</a>#}
     <br><br>
-        <form action="{% url 'add_in_basket' product.pk %}" method="POST">
+        <form action="{% url 'webapp:add_in_basket' product.pk %}" method="POST">
 {%  include 'partial/form.html' with button='Добавить'%}
 
 

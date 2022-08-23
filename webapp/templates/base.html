@@ -13,12 +13,21 @@
 {% block nav %}
     <nav class="navbar bg-light">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'IndexView' %}">Home
+            <a class="navbar-brand" href="{% url 'webapp:IndexView' %}">Home
             </a>
-            <a class="navbar-brand" href="{% url 'CreateProduct' %}">Create
+            <a class="navbar-brand" href="{% url 'webapp:CreateProduct' %}">Create
             </a>
-            <a class="navbar-brand" href="{% url 'Basket' %}">Basket
+            <a class="navbar-brand" href="{% url 'webapp:Basket' %}">Basket
             </a>
+            {%  if not user.is_authenticated %}
+                <a class="navbar-brand" href="{% url 'accounts:login' %}">Войти</a>
+                <a class="navbar-brand" href="{% url 'accounts:register_view' %}">Регистрация</a>
+
+                {% endif %}
+        {%  if  user.is_authenticated %}
+            <a class="navbar-brand" href="{% url 'accounts:logout' %}">Выйти
+            </a>
+    {% endif %}
         </div>
     </nav>
 {% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% for user in users %}
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Название:
+
+                    <a href="{% url 'accounts:UserDetailView' user.id %} ">{{ user }}</a></h5>
+
+{#                {% if perms.webapp.view_user  %}#}
+{#                <a href="{% url 'webapp:UpdateProject' project.pk %}" class="card-link">Update</a>#}
+{#                <a href="{% url 'webapp:DeleteProject' project.pk %}" class="card-link">Delete</a>#}
+{#                <a href="{% url 'webapp:SoftDeleteProject' project.pk %}" class="card-link">SoftDelete</a>#}
+{#                {% endif %}#}
+            </div>
+        </div>
+    {% endfor %}
+    {% if  request.user.project.all%}
+    {% for project in request.user.project.all %}
+        {% include 'partial/project_list.html' %}
+    {% endfor %}
+    {% endif %}
+
+    {% if is_paginated %}
+        {% include "partial/pagination.html" %}
+    {% endif %}
+{% endblock %}
