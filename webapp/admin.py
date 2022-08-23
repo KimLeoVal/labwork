@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from webapp.models import Product, ProInBasket, Order, OrderBasket
+from webapp.models import Product,  Order, OrderBasket
 
 
 class OrderBasketInline(admin.TabularInline):
@@ -23,7 +23,7 @@ class OrderAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Product)
-admin.site.register(ProInBasket)
+
 admin.site.register(Order,OrderAdmin)
 admin.site.register(OrderBasket)
 

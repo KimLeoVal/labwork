@@ -17,20 +17,20 @@
               <th scope="col"></th>
             </tr>
 
-  {% for product in products %}
+{#  {% for product in products %}#}
 
           </thead>
           <tbody>
             <tr>
               <th scope="row">{{ forloop.counter }}</th>
-              <td>{{ product.product.name }}</td>
-              <td>{{ product.product.price }}</td>
-              <td>{{ product.quantity }} <button><a href="{% url 'webapp:delete_one_by_one' product.pk %}" style="text-decoration:none; color:black">Удалять по 1</a></button></td>
+              <td>{{ product }}</td>
+              <td>{{ price }}</td>
+              <td>{{qty }} <button><a href="{% url 'webapp:delete_one_by_one' product.pk %}" style="text-decoration:none; color:black">Удалять по 1</a></button></td>
               <td>{{ product.sum_pro}}</td>
               <th scope="col"><button><a href="{% url 'webapp:DeleteFromBasket' product.pk %}" style="text-decoration:none; color:black">Удалить</a></button> </th>
             </tr>
 
-    {%  endfor %}
+{#    {%  endfor %}#}
 
           </tbody>
         </table>

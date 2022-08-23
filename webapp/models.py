@@ -14,13 +14,13 @@ class Product(models.Model):
         return f'Название:{self.name}'
 
 
-class ProInBasket(models.Model):
-    product = models.ForeignKey('webapp.Product', related_name='proinbaskets', on_delete=models.CASCADE,
-                                verbose_name='Продукт')
-    quantity = models.PositiveIntegerField()
-
-    def __str__(self):
-        return f'Название:{self.product}'
+# class ProInBasket(models.Model):
+#     product = models.ForeignKey('webapp.Product', related_name='proinbaskets', on_delete=models.CASCADE,
+#                                 verbose_name='Продукт')
+#     quantity = models.PositiveIntegerField()
+#
+#     def __str__(self):
+#         return f'Название:{self.product}'
 
 
 class OrderBasket(models.Model):

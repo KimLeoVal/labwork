@@ -7,10 +7,10 @@ from django.urls import reverse, reverse_lazy
 from django.utils.http import urlencode
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-
+from django.contrib.sessions.models import Session
 from webapp import forms
 from webapp.forms import ProductForm, SearchForm, OrderForm, AddQtyToBasketForm
-from webapp.models import Product, CHOICE, ProInBasket, Order, OrderBasket
+from webapp.models import Product, CHOICE,  Order, OrderBasket
 
 
 class IndexView(ListView):
@@ -197,114 +197,117 @@ class AddInBasket(View):
         pk = self.kwargs.get('pk')
         product = get_object_or_404(Product, pk=pk)
         if product.remain != 0:
-            # print(product.remain)
-            # product.remain -= 1
-            # product.save()
             self.quantity += 1
-            basket = ProInBasket.objects.all()
-            if not basket:
-                ProInBasket.objects.create(product_id=pk, quantity=self.quantity)
-            else:
-                try:
-                    prod = get_object_or_404(ProInBasket, product_id=pk)
-                    qty = prod.quantity + 1
-                    if qty > product.remain:
-                        qty = prod.quantity
-                        prod.quantity = qty
-                        prod.save()
-                    else:
-                        qty = prod.quantity + 1
-                        prod.quantity = qty
-                        prod.save()
-                except:
-                    ProInBasket.objects.create(product_id=pk, quantity=self.quantity)
+            request.session['quantity']=self.quantity
+            request.session['pk'] = pk
+            # basket = ProInBasket.objects.all()
+            # if not basket:
+            #     ProInBasket.objects.create(product_id=pk, quantity=self.quantity)
+            # else:
+            #     try:
+            #         prod = get_object_or_404(ProInBasket, product_id=pk)
+            #         qty = prod.quantity + 1
+            #         if qty > product.remain:
+            #             qty = prod.quantity
+            #             prod.quantity = qty
+            #             prod.save()
+            #         else:
+            #             qty = prod.quantity + 1
+            #             prod.quantity = qty
+            #             prod.save()
+            #     except:
+            #         ProInBasket.objects.create(product_id=pk, quantity=self.quantity)
         return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
 
 
-    def post(self,request,*args,**kwargs):
-        pk = self.kwargs.get('pk')
-        product = get_object_or_404(Product, pk=pk)
-        if product.remain != 0:
-            # print(product.remain)
-            quantity = int(request.POST.get('qty'))
-            # print(quantity)
-            basket = ProInBasket.objects.all()
-            # print(basket)
-            if not basket:
-                if quantity > product.remain :
-                    quantity = product.remain
-                ProInBasket.objects.create(product_id=pk, quantity=quantity)
-
-            else:
-                try:
-                    if quantity > product.remain:
-                        quantity = product.remain
-                    prod = get_object_or_404(ProInBasket,product_id = product.pk)
-
-                    qty = prod.quantity  + quantity
-
-
-                    if qty > product.remain:
-                        qty = product.remain
-                        prod.quantity = qty
-                        prod.save()
-                    else:
-                        prod.quantity = qty
-                        prod.save()
-                except:
-                    ProInBasket.objects.create(product_id=pk, quantity=quantity)
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
-
-
-
-
-def basket(request):
-    total = 0
-    products = ProInBasket.objects.all()
-    for product in products:
-        sum_pro = product.quantity * product.product.price
-        product.sum_pro = sum_pro
-        product.save()
-        total += product.sum_pro
-    return render(request, 'basket.html', {'products': products, 'total':total})
-
-class Basket(ListView):
-    model = ProInBasket
-    template_name = 'basket.html'
-    context_object_name = 'products'
+    # def post(self,request,*args,**kwargs):
+    #     pk = self.kwargs.get('pk')
+    #     product = get_object_or_404(Product, pk=pk)
+    #     if product.remain != 0:
+    #         # print(product.remain)
+    #         quantity = int(request.POST.get('qty'))
+    #         # print(quantity)
+    #         basket = ProInBasket.objects.all()
+    #         # print(basket)
+    #         if not basket:
+    #             if quantity > product.remain :
+    #                 quantity = product.remain
+    #             ProInBasket.objects.create(product_id=pk, quantity=quantity)
+    #
+    #         else:
+    #             try:
+    #                 if quantity > product.remain:
+    #                     quantity = product.remain
+    #                 prod = get_object_or_404(ProInBasket,product_id = product.pk)
+    #
+    #                 qty = prod.quantity  + quantity
+    #
+    #
+    #                 if qty > product.remain:
+    #                     qty = product.remain
+    #                     prod.quantity = qty
+    #                     prod.save()
+    #                 else:
+    #                     prod.quantity = qty
+    #                     prod.save()
+    #             except:
+    #                 ProInBasket.objects.create(product_id=pk, quantity=quantity)
+    #     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
 
 
-    def sum_prod(self):
-        total = 0
-        products = ProInBasket.objects.all()
-        for product in products:
-            sum_pro = product.quantity * product.product.price
-            product.sum_pro = sum_pro
-            product.save()
-            total += product.sum_pro
-        return products
+# def basket(request):
+#     total = 0
+#     products = ProInBasket.objects.all()
+#     for product in products:
+#         sum_pro = product.quantity * product.product.price
+#         product.sum_pro = sum_pro
+#         product.save()
+#         total += product.sum_pro
+#     return render(request, 'basket.html', {'products': products, 'total':total})
 
-    def total(self):
-        total = 0
-        products = ProInBasket.objects.all()
-        for product in products:
-            sum_pro = product.quantity * product.product.price
-            total += sum_pro
-        return total
+class Basket(View):
+    def get(self,request,*args,**kwargs):
+        pk = request.session.get('pk')
+        product = get_object_or_404(Product,pk=pk)
+        qty = request.session.get('quantity')
+        pirce = product.price
+        print(product,qty)
+        return render(request, 'basket.html', {'product': product, 'qty': qty,'price': pirce})
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(object_list=object_list, **kwargs)
-        context['products'] = self.sum_prod()
-        context['total'] = self.total()
-        context['form'] = OrderForm
-        return context
+
+
+
+    # def sum_prod(self):
+    #     total = 0
+    #     products = ProInBasket.objects.all()
+    #     for product in products:
+    #         sum_pro = product.quantity * product.product.price
+    #         product.sum_pro = sum_pro
+    #         product.save()
+    #         total += product.sum_pro
+    #     return products
+
+    # def total(self):
+    #     total = 0
+    #     products = ProInBasket.objects.all()
+    #     for product in products:
+    #         sum_pro = product.quantity * product.product.price
+    #         total += sum_pro
+    #     return total
+    #
+    # def get_context_data(self, *, object_list=None, **kwargs):
+    #     context = super().get_context_data(object_list=object_list, **kwargs)
+    #     context['products'] = self.sum_prod()
+    #     context['total'] = self.total()
+    #     context['form'] = OrderForm
+    #     return context
 
 
 
 class DeleteFromBasket(DeleteView):
-    model = ProInBasket
+
     template_name = 'delete.html'
     context_object_name = 'product'
     success_url = reverse_lazy('webapp:Basket')
@@ -312,13 +315,13 @@ class DeleteFromBasket(DeleteView):
 
 
 def delete_one_by_one(request,pk):
-    product = get_object_or_404(ProInBasket,pk=pk)
-    if product.quantity >1:
-        qty = product.quantity -1
-        product.quantity = qty
-        product.save()
-    elif product.quantity ==1:
-        product.delete()
+    # product = get_object_or_404(ProInBasket,pk=pk)
+    # if product.quantity >1:
+    #     qty = product.quantity -1
+    #     product.quantity = qty
+    #     product.save()
+    # elif product.quantity ==1:
+    #     product.delete()
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
 
@@ -330,20 +333,20 @@ class CreateOrder(CreateView):
     template_name = 'basket.html'
     form_class = OrderForm
 
-    def form_valid(self, form):
-        """If the form is valid, save the associated model."""
-        self.object = form.save()
-        products = ProInBasket.objects.all()
-        order_id = self.object.pk
-        for product in products:
-            OrderBasket.objects.create(order_id=order_id, product_id=product.product.pk, quantity=product.quantity)
-            pro = get_object_or_404(Product,pk = product.product.pk)
-            remain = pro.remain - product.quantity
-            pro.remain = remain
-            pro.save()
-
-        products.delete()
-        return super().form_valid(form)
+    # def form_valid(self, form):
+    #     """If the form is valid, save the associated model."""
+    #     self.object = form.save()
+    #     products = ProInBasket.objects.all()
+    #     order_id = self.object.pk
+    #     for product in products:
+    #         OrderBasket.objects.create(order_id=order_id, product_id=product.product.pk, quantity=product.quantity)
+    #         pro = get_object_or_404(Product,pk = product.product.pk)
+    #         remain = pro.remain - product.quantity
+    #         pro.remain = remain
+    #         pro.save()
+    #
+    #     products.delete()
+    #     return super().form_valid(form)
 
     def get_success_url(self):
         return reverse('IndexView')
