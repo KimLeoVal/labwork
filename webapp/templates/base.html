@@ -15,8 +15,10 @@
         <div class="container">
             <a class="navbar-brand" href="{% url 'webapp:IndexView' %}">Home
             </a>
+        {% if perms.webapp.add_product%}
             <a class="navbar-brand" href="{% url 'webapp:CreateProduct' %}">Create
             </a>
+        {%  endif %}
             <a class="navbar-brand" href="{% url 'webapp:Basket' %}">Basket
             </a>
             {%  if not user.is_authenticated %}

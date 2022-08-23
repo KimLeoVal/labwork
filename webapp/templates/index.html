@@ -14,7 +14,7 @@
             {% if perms.webapp.delete_product%}
                 <a href="{% url 'webapp:DeleteProduct' product.pk %}" class="card-link">Delete</a>
 {%  endif %}
-            {% if perms.webapp.add_product %}
+
                 <p><a href="{% url 'webapp:add_in_basket' product.pk %}" class="card-link"
                        style="text-decoration: none;color: red">
                         <button  style="width: 10rem">Add</button>
@@ -24,7 +24,7 @@
                 <form action="{% url 'webapp:add_in_basket' product.pk %}" method="POST">
                     {% include 'partial/form2.html' with button='Добавить' %}
                 </form>
-{% endif %}
+
             </div>
         </div>
     {% endfor %}

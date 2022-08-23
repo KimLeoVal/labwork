@@ -87,10 +87,11 @@ class ProductView(DetailView):
 #     product = get_object_or_404(Product, pk=pk)
 #     return render(request, 'product.html', {'product': product})
 
-class CreateProduct(CreateView):
+class CreateProduct(PermissionRequiredMixin,CreateView):
     model = Product
     template_name = 'create.html'
     form_class = ProductForm
+    permission_required = 'webapp.add_product'
 
 
 
@@ -186,16 +187,14 @@ def category_view(request, category):
 
 
 # def add_in_basket(request, pk):
-class AddInBasket(PermissionRequiredMixin,View):
-    permission_required = 'webapp.add_product'
+class AddInBasket(View):
+
     quantity = 0
 
     # product = get_object_or_404(Product, pk=pk)
     # if request.method=='GET':
     def get(self,request,*args,**kwargs):
-        print('sdfsfs')
         pk = self.kwargs.get('pk')
-        print(pk)
         product = get_object_or_404(Product, pk=pk)
         if product.remain != 0:
             # print(product.remain)
@@ -221,42 +220,39 @@ class AddInBasket(PermissionRequiredMixin,View):
                     ProInBasket.objects.create(product_id=pk, quantity=self.quantity)
         return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
 
-    # def post(self, request, *args, **kwargs):
-    #     print('sdfsfs')
-    #     pk = self.kwargs.get('pk')
-    #     print(pk)
-    # def post(self,request,*args,**kwargs):
-    #     # product = get_object_or_404(Product, pk=pk)
-    #     # print(product)
-    #     if product.remain != 0:
-    #         # print(product.remain)
-    #         quantity = int(request.POST.get('qty'))
-    #         # print(quantity)
-    #         basket = ProInBasket.objects.all()
-    #         # print(basket)
-    #         if not basket:
-    #             if quantity > product.remain :
-    #                 quantity = product.remain
-    #             ProInBasket.objects.create(product_id=pk, quantity=quantity)
-    #
-    #         else:
-    #             try:
-    #                 if quantity > product.remain:
-    #                     quantity = product.remain
-    #                 prod = get_object_or_404(ProInBasket,product_id = product.pk)
-    #
-    #                 qty = prod.quantity  + quantity
-    #
-    #
-    #                 if qty > product.remain:
-    #                     qty = product.remain
-    #                     prod.quantity = qty
-    #                     prod.save()
-    #                 else:
-    #                     prod.quantity = qty
-    #                     prod.save()
-    #             except:
-    #                 ProInBasket.objects.create(product_id=pk, quantity=quantity)
+
+    def post(self,request,*args,**kwargs):
+        pk = self.kwargs.get('pk')
+        product = get_object_or_404(Product, pk=pk)
+        if product.remain != 0:
+            # print(product.remain)
+            quantity = int(request.POST.get('qty'))
+            # print(quantity)
+            basket = ProInBasket.objects.all()
+            # print(basket)
+            if not basket:
+                if quantity > product.remain :
+                    quantity = product.remain
+                ProInBasket.objects.create(product_id=pk, quantity=quantity)
+
+            else:
+                try:
+                    if quantity > product.remain:
+                        quantity = product.remain
+                    prod = get_object_or_404(ProInBasket,product_id = product.pk)
+
+                    qty = prod.quantity  + quantity
+
+
+                    if qty > product.remain:
+                        qty = product.remain
+                        prod.quantity = qty
+                        prod.save()
+                    else:
+                        prod.quantity = qty
+                        prod.save()
+                except:
+                    ProInBasket.objects.create(product_id=pk, quantity=quantity)
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
