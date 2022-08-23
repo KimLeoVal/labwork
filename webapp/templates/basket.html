@@ -17,18 +17,29 @@
               <th scope="col"></th>
             </tr>
 
-{#  {% for product in products %}#}
+  {% for product in products %}
 
           </thead>
           <tbody>
             <tr>
               <th scope="row">{{ forloop.counter }}</th>
-              <td>{{ product }}</td>
-              <td>{{ price }}</td>
-              <td>{{qty }} <button><a href="{% url 'webapp:delete_one_by_one' product.pk %}" style="text-decoration:none; color:black">Удалять по 1</a></button></td>
-              <td>{{ product.sum_pro}}</td>
-              <th scope="col"><button><a href="{% url 'webapp:DeleteFromBasket' product.pk %}" style="text-decoration:none; color:black">Удалить</a></button> </th>
-            </tr>
+
+              <td>{{ product}}</td>
+      <td>{{ product.price}}</td>
+      <td>{{ product.qty}}</td>
+      <td>{{ product.sum}}</td>
+
+{#            {% for price in price %}#}
+{#              <td>{{ price }}</td>#}
+{##}{% endfor %}
+{##}
+{#            {% for qty in qty %}#}
+{#            <td>{{ qty }}</td>#}
+{#            {% endfor %}#}
+{#              <td>{{qty }} <button><a href="{% url 'webapp:delete_one_by_one' product.pk %}" style="text-decoration:none; color:black">Удалять по 1</a></button></td>#}
+{#              <td>{{ product.sum_pro}}</td>#}
+{#              <th scope="col"><button><a href="{% url 'webapp:DeleteFromBasket' product.pk %}" style="text-decoration:none; color:black">Удалить</a></button> </th>#}
+{#            </tr>#}
 
 {#    {%  endfor %}#}
 

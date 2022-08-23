@@ -6,7 +6,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.utils.http import urlencode
 from django.views import View
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from django.contrib.sessions.models import Session
 from webapp import forms
 from webapp.forms import ProductForm, SearchForm, OrderForm, AddQtyToBasketForm
@@ -186,20 +186,39 @@ def category_view(request, category):
     return render(request, 'category.html', {'products': products})
 
 
-# def add_in_basket(request, pk):
+# def add_in_basket(request, pk)(
+# class Click:
+#
 class AddInBasket(View):
-
+    id_list = []
+    qty_list=[]
     quantity = 0
 
     # product = get_object_or_404(Product, pk=pk)
     # if request.method=='GET':
     def get(self,request,*args,**kwargs):
         pk = self.kwargs.get('pk')
-        product = get_object_or_404(Product, pk=pk)
-        if product.remain != 0:
-            self.quantity += 1
-            request.session['quantity']=self.quantity
-            request.session['pk'] = pk
+        if pk not in self.id_list:
+            self.id_list.append(pk)
+            product = get_object_or_404(Product, pk=pk)
+            if product.remain != 0:
+                qty = self.quantity +1
+                self.qty_list.append(qty)
+                request.session['quantity']=self.qty_list
+                request.session['pk'] = self.id_list
+                # self.quantity=qty
+                print(self.id_list,self.qty_list)
+        elif pk in self.id_list:
+            product = get_object_or_404(Product, pk=pk)
+            if product.remain != 0:
+                index = self.id_list.index(pk)
+                qty = self.qty_list[index]
+                qty = qty +1
+                self.qty_list[index] = qty
+                request.session['quantity'] = self.qty_list
+                request.session['pk'] = self.id_list
+                print('test')
+                print(self.id_list,self.qty_list)
             # basket = ProInBasket.objects.all()
             # if not basket:
             #     ProInBasket.objects.create(product_id=pk, quantity=self.quantity)
@@ -217,6 +236,9 @@ class AddInBasket(View):
             #             prod.save()
             #     except:
             #         ProInBasket.objects.create(product_id=pk, quantity=self.quantity)
+
+        if not request.session.session_key:
+            request.session.save()
         return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
 
 
@@ -267,14 +289,34 @@ class AddInBasket(View):
 #         total += product.sum_pro
 #     return render(request, 'basket.html', {'products': products, 'total':total})
 
-class Basket(View):
+class Basket(TemplateView):
+    template_name = 'basket.html'
+    products = []
+    print(products)
+    pk_list = AddInBasket.id_list
+    qty = AddInBasket.qty_list
+    # def prod(self,request,*args,**kwargs):
+    #     for pk in self.pk_list:
+    #         product = get_object_or_404(Product,pk=pk)
+    #         print(product)
+    #         product.rem=product.remain
+    #         i = self.pk_list.index(pk)
+    #         product.qty = self.qty[i]
+    #         product.sum=product.price*self.qty[i]
+    #         self.products.append(product)
+
     def get(self,request,*args,**kwargs):
-        pk = request.session.get('pk')
-        product = get_object_or_404(Product,pk=pk)
-        qty = request.session.get('quantity')
-        pirce = product.price
-        print(product,qty)
-        return render(request, 'basket.html', {'product': product, 'qty': qty,'price': pirce})
+        super().get(request,*args,**kwargs)
+        for pk in self.pk_list:
+            product = get_object_or_404(Product,pk=pk)
+            product.rem=product.remain
+            i = self.pk_list.index(pk)
+            product.qty = self.qty[i]
+            product.sum=product.price*self.qty[i]
+            self.products.append(product)
+        print(self.products)
+
+        return render(request, 'basket.html', {'products': self.products})
 
 
 
