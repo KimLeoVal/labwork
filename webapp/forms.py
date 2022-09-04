@@ -22,7 +22,9 @@ class SearchForm(forms.Form):
 class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
-        exclude = ['products']
+        exclude = ['products','user']
+
+
 
 class AddQtyToBasketForm(forms.Form):
     qty = forms.IntegerField(label="Добавить много:")

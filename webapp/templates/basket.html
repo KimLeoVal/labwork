@@ -27,11 +27,13 @@
               <td>{{ product}}</td>
       <td>{{ product.price}}</td>
       <td>{{ product.qty}}</td>
-      <td>{{ product.sum}}</td>
+      <td>{{ sum }}</td>
 
+      <th scope="col"><button method="POST"><a href="{% url 'webapp:DeleteFromBasket' product.pk %}" style="text-decoration:none; color:black">Удалить</a></button> </th>
+{% endfor %}
 {#            {% for price in price %}#}
 {#              <td>{{ price }}</td>#}
-{##}{% endfor %}
+{##}
 {##}
 {#            {% for qty in qty %}#}
 {#            <td>{{ qty }}</td>#}
@@ -45,18 +47,17 @@
 
           </tbody>
         </table>
-        <div>
+
 <h3>Сумма заказа: {{ total }}</h3>
     <br>
     <br>
 
-    {% if products %}
 
         <h3 style="">Заполните форму для заказа</h3>
     <form action="{% url 'webapp:CreateOrder' %}" method="POST">
         {% include 'partial/form.html' with button='Оформит заказ' %}
     </form>
 
-    {% endif %}
+</div>
 
 {% endblock %}

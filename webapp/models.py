@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.db import models
 
 CHOICE = [('other', 'разное'), ('bred', 'хлебо-булочные'), ('milk', 'молочка'), ('alco', 'алкоголь')]
@@ -37,15 +38,15 @@ class OrderBasket(models.Model):
 #                                 verbose_name='Продукт')
 
 class Order(models.Model):
-
+    user = models.ForeignKey(get_user_model(),null=True, related_name='orders',verbose_name='Пользователь',on_delete=models.CASCADE)
     name = models.CharField(max_length=20, verbose_name='Имя')
-    products = models.ManyToManyField('webapp.Product', related_name='orders', blank=True)
+    products = models.ManyToManyField('webapp.OrderBasket', related_name='orders', blank=True)
     phone = models.CharField(max_length=20, verbose_name='Телефон')
     adres = models.CharField(max_length=60, verbose_name='Адрес')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
 
-    def get_products(self):
-        products = OrderBasket.objects.all()
-        return products
+    # def get_products(self):
+    #     products = OrderBasket.objects.all()
+    #     return products
 
 

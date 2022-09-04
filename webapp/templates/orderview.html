@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{%  block content %}
+{% for order in orders %}
+       <div class="card -flex col-md-6  col-lg-6" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">Заказ {{ forloop.counter }}
+                         </h5>
+                    {% for prod in order.orders.all %}
+                        <p>Продукт: {{ prod.product.name }}</p>
+                    <p>Количество: {{ prod.quantity }}</p>
+                        {% endfor %}
+{#                    {% if perms.webapp.change_product %}#}
+{#                        <a href="{% url 'webapp:UpdateProduct' product.pk %}" class="card-link">Update</a>#}
+{#                    {% endif %}#}
+{#                    {% if perms.webapp.delete_product %}#}
+{#                        <a href="{% url 'webapp:DeleteProduct' product.pk %}" class="card-link">Delete</a>#}
+{#                    {% endif %}#}
+{##}
+{#                    <p><a href="{% url 'webapp:add_in_basket' product.pk %}" class="card-link"#}
+{#                          style="text-decoration: none;color: red">#}
+{#                        <button style="width: 10rem">Add</button>#}
+{#                    </a>#}
+{#                    </p>#}
+
+
+                </div>
+            </div>
+    {% endfor %}
+{% endblock %}
